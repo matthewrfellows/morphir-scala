@@ -1,0 +1,10 @@
+{
+  "name": "Morphir.SDK.Tests",
+  "sourceDirectory": "src",
+  "localDependencies": [
+      "../../morphir-unit-test/morphir-ir.json"
+  ],
+  "exposedModules": [
+      "CharTests"
+  ]
+}
