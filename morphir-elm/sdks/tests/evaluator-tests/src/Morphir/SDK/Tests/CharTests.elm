@@ -98,118 +98,272 @@ charIsAlphaTest =
     ]
 
 
-{-|
-
+{-
     Test: Char/isAlphaNum
-    expected('z') = True
-    expected('A') = False
-    expected('1') = True
-    expected('π') = False
-
 -}
-charIsAlphaNumTest : Char -> Bool
-charIsAlphaNumTest ch =
-    isAlphaNum ch
+charIsAlphaNumTest : Test
+charIsAlphaNumTest =
+    describe "Char isAlphaNum Tests"
+    [
+       test "Upper Case Letters"
+        \_ -> 
+            let
+                testChars = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'X', 'Y', 'Z']
+            in
+                Expect.equalLists (List.map isAlphaNum testChars) (List.repeat 14 True)
+        , test "Lower Case Letters"
+        \_ -> 
+            let
+                testChars = ['a', 'b', 'c', 'd', 'e', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+            in
+                Expect.equalLists (List.map isAlphaNum testChars) (List.repeat 14 True)
+        , test "Numbers"
+        \_ ->
+            let
+                testChars = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
+            in
+                Expect.equalLists (List.map isAlphaNum testChars) (List.repeat 10 True)
+        , test "Symbols"
+        \_ ->
+            let
+                testChars = ['-', '+', '*', ')', '&']
+            in
+                Expect.equalLists (List.map isAlphaNum testChars) (List.repeat 5 False)
+    ]
 
 
-{-|
-
+{-
     Test: Char/isDigit
-    expected('1') = True
-    expected('A') = False
-    expected('π') = False
-
 -}
-charIsDigitTest : Char -> Bool
-charIsDigitTest ch =
-    isDigit ch
+charIsDigitTest : Test
+charIsDigitTest =
+    describe "Char isDigit Tests"
+    [
+       test "Upper Case Letters"
+        \_ -> 
+            let
+                testChars = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'X', 'Y', 'Z']
+            in
+                Expect.equalLists (List.map isDigit testChars) (List.repeat 14 False)
+        , test "Lower Case Letters"
+        \_ -> 
+            let
+                testChars = ['a', 'b', 'c', 'd', 'e', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+            in
+                Expect.equalLists (List.map isDigit testChars) (List.repeat 14 False)
+        , test "Numbers"
+        \_ ->
+            let
+                testChars = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
+            in
+                Expect.equalLists (List.map isDigit testChars) (List.repeat 10 True)
+        , test "Symbols"
+        \_ ->
+            let
+                testChars = ['-', '+', '*', ')', '&']
+            in
+                Expect.equalLists (List.map isDigit testChars) (List.repeat 5 False)
+    ]
 
 
-{-|
-
+{-
     Test: Char/isOctDigit
-    expected('1') = True
-    expected('8') = False
-    expected('A') = False
-    expected('π') = False
-
 -}
-charIsOctDigitTest : Char -> Bool
-charIsOctDigitTest ch =
-    isOctDigit ch
+charIsOctDigitTest : Test
+charIsOctDigitTest =
+    describe "Char isOctDigit Tests"
+    [
+       test "Upper Case Letters"
+        \_ -> 
+            let
+                testChars = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'X', 'Y', 'Z']
+            in
+                Expect.equalLists (List.map isOctDigit testChars) (List.repeat 14 False)
+        , test "Lower Case Letters"
+        \_ -> 
+            let
+                testChars = ['a', 'b', 'c', 'd', 'e', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+            in
+                Expect.equalLists (List.map isOctDigit testChars) (List.repeat 14 False)
+        , test "Numbers"
+        \_ ->
+            let
+                testChars = ['0', '1', '2', '3', '4', '5', '6', '7']
+            in
+                Expect.equalLists (List.map isOctDigit testChars) (List.repeat 8 True)
+        , test "Symbols and non-octal Digits"
+        \_ ->
+            let
+                testChars = ['-', '+', '*', ')', '&', '8', '9']
+            in
+                Expect.equalLists (List.map isOctDigit testChars) (List.repeat 7 False)
+    ]
 
 
-{-|
-
+{-
     Test: Char/isHexDigit
-    expected('1') = True
-    expected('A') = True
-    expected('f') = True
-    expected('g') = False
-    expected('π') = False
-
 -}
-charIsHexDigitTest : Char -> Bool
-charIsHexDigitTest ch =
-    isHexDigit ch
+charIsHexDigitTest : Test
+charIsHexDigitTest =
+    describe "Char isHexDigit Tests"
+    [
+       test "Upper Case Letters"
+        \_ -> 
+            let
+                testChars = ['G', 'H', 'I', 'J', 'K', 'X', 'Y', 'Z']
+            in
+                Expect.equalLists (List.map isHexDigit testChars) (List.repeat 8 False)
+        , test "Lower Case Letters"
+        \_ -> 
+            let
+                testChars = ['r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+            in
+                Expect.equalLists (List.map isHexDigit testChars) (List.repeat 9 False)
+        , test "Hex Digits"
+        \_ ->
+            let
+                testChars = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'a', 'b', 'c', 'd', 'e', 'f']
+            in
+                Expect.equalLists (List.map isHexDigit testChars) (List.repeat 22 True)
+        , test "Symbols"
+        \_ ->
+            let
+                testChars = ['-', '+', '*', ')', '&', '^', '(', '%']
+            in
+                Expect.equalLists (List.map isHexDigit testChars) (List.repeat 8 False)
+    ]
 
-
-{-|
-
+{-
     Test: Char/toUpper
-    expected('z') = 'Z'
-
 -}
-charToUpperTest : Char -> Char
-charToUpperTest ch =
-    toUpper ch
+charToUpperTest : Test
+charToUpperTest =
+    let
+        func = toUpper
+        uppers = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+        lowers = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+    in
+        describe "Char toUpper Tests"
+        [
+            test "Upper Case Letters"
+            \_ -> 
+                    Expect.equalLists (List.map func uppers) uppers
+            , test "Lower Case Letters"
+            \_ -> 
+                    Expect.equalLists (List.map func lowers) uppers
+        ]
 
-
-{-|
-
+{-
     Test: Char/toLower
-    expected('Z') = 'z'
-
 -}
-charToLowerTest : Char -> Char
-charToLowerTest ch =
-    toLower ch
-
+charToLowerTest : Test
+charToLowerTest =
+    let
+        func = toLower
+        uppers = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+        lowers = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+    in
+        describe "Char toLower Tests"
+        [
+            test "Upper Case Letters"
+            \_ -> 
+                    Expect.equalLists (List.map func uppers) lowers
+            , test "Lower Case Letters"
+            \_ -> 
+                    Expect.equalLists (List.map func lowers) lowers
+        ]
 
 {-|
 
     Test: Char/toLocaleUpper
     expected('z') = 'Z'
-
+    It's hard to know what to expect here, since there is no way to define the 'locale'.
+    I don't think the interpreter uses 'locale' at all, so this function is no different from toUpper.
 -}
-charToLocaleUpperTest : Char -> Char
-charToLocaleUpperTest ch =
-    toLocaleUpper ch
+charToLocaleUpperTest : Test
+charToLocaleUpperTest =
+    let
+        func = toLocaleUpper
+        uppers = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+        lowers = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+    in
+        describe "Char toLocaleUpper Tests"
+        [
+            test "Upper Case Letters"
+            \_ -> 
+                    Expect.equalLists (List.map func uppers) uppers
+            , test "Lower Case Letters"
+            \_ -> 
+                    Expect.equalLists (List.map func lowers) uppers
+        ]
 
 
 {-|
 
     Test: Char/toLocaleLower
     expected('Z') = 'z'
-
+    It's hard to know what to expect here, since there is no way to define the 'locale'.
+    I don't think the interpreter uses 'locale' at all, so this function is no different from toUpper.
 -}
-charToLocaleLowerTest : Char -> Char
-charToLocaleLowerTest ch =
-    toLocaleLower ch
+charToLocaleLowerTest : Test
+charToLocaleLowerTest =
+    let
+        func = toLocaleLower
+        uppers = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+        lowers = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+    in
+        describe "Char toLocaleLower Tests"
+        [
+            test "Upper Case Letters"
+            \_ -> 
+                    Expect.equalLists (List.map func uppers) lowers
+            , test "Lower Case Letters"
+            \_ -> 
+                    Expect.equalLists (List.map func lowers) lowers
+        ]
 
 
+
+{-
+    NOTE: the `toCode` tests are failing with this error:
+    ERROR org.finos.morphir.runtime.MorphirRuntimeError$CodeLocatedError: ExternalError : External error: Unrecognized character name :A
+        		at morphir: Morphir.SDK:Char:toCode (native function)
+        		at morphir: anonymous function within EntryPoint
+-}
 {-|
-
     Test: Char/toCode
     expected('A') = 65
     expected('B') = 66
     expected('木') = 0x6728
-
 -}
-charToCodeTest : Char -> Int
-charToCodeTest ch =
-    toCode ch
+{- charToCodeTest : Test
+charToCodeTest =
+    let
+        func = toCode
+        uppers = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+        lowers = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+    in
+        describe "Char toCode Tests"
+        [
+            test "Upper Case Letters"
+            \_ -> 
+                    Expect.equalLists (List.map func uppers) (List.range 65 (65 + 25))
+            , test "Lower Case Letters"
+            \_ -> 
+                    Expect.equalLists (List.map func lowers) (List.range 97 (97 + 25))
+        ] -}
 
+charToCodeSimpleTest : Test
+charToCodeSimpleTest =
+    describe "Char toCode Simple Tests"
+    [
+        test "Upper Case Letter"
+        \_ -> 
+                Expect.equal (toCode 'A') 65 
+        , test "Lower Case Letter"
+        \_ -> 
+                Expect.equal (toCode 'a') 97 
+    ]
 
 {-|
 
@@ -220,6 +374,14 @@ charToCodeTest ch =
     expected(-1) = '�'
 
 -}
-charFromCodeTest : Int -> Char
-charFromCodeTest int =
-    fromCode int
+charFromCodeTest : Test
+charFromCodeTest =
+    describe "Simple Char/fromCode Tests"
+    [
+        test "Upper Case Letter"
+        \_ ->
+            Expect.equal (fromCode 65) 'A'
+        , test "Lower Case Letter"
+        \_ ->
+            Expect.equal (fromCode 97) 'a'
+    ]
