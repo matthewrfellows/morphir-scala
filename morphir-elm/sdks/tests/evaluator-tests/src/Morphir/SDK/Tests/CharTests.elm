@@ -4,7 +4,6 @@ import Morphir.UnitTest.Test exposing (..)
 import Morphir.UnitTest.Expect as Expect
 import Morphir.SDK.Char as Char exposing (..)
 
-
 {-
     Test: Char/isUpper
 -}
@@ -30,17 +29,13 @@ charIsUpperTest =
                 testChars = ['1', '2', '3', '0', '-', '+', '*', ')', '&']
             in
                 Expect.equalLists (List.map isUpper testChars) (List.repeat 9 False)
-        {-
-            -- Decoding of IR doesn't seem to be supported for all characters
         , test "Upper Case Symbols"
         \_ ->
             let
-                testChars = ['Σ', '𝛱']
+                testChars = ['Σ', 'Φ']
             in
                 Expect.equalLists (List.map isUpper testChars) (List.repeat 2 True)
-        -}
     ]
-
 
 {-|
     Test: Char/isLower
@@ -69,7 +64,6 @@ charIsLowerTest =
                 Expect.equalLists (List.map isLower testChars) (List.repeat 9 False)
     ]
 
-
 {-
     Test: Char/isAlpha
 -}
@@ -96,7 +90,6 @@ charIsAlphaTest =
             in
                 Expect.equalLists (List.map isAlpha testChars) (List.repeat 15 False)
     ]
-
 
 {-
     Test: Char/isAlphaNum
@@ -131,7 +124,6 @@ charIsAlphaNumTest =
                 Expect.equalLists (List.map isAlphaNum testChars) (List.repeat 5 False)
     ]
 
-
 {-
     Test: Char/isDigit
 -}
@@ -165,7 +157,6 @@ charIsDigitTest =
                 Expect.equalLists (List.map isDigit testChars) (List.repeat 5 False)
     ]
 
-
 {-
     Test: Char/isOctDigit
 -}
@@ -198,7 +189,6 @@ charIsOctDigitTest =
             in
                 Expect.equalLists (List.map isOctDigit testChars) (List.repeat 7 False)
     ]
-
 
 {-
     Test: Char/isHexDigit
@@ -297,7 +287,6 @@ charToLocaleUpperTest =
                     Expect.equalLists (List.map func lowers) uppers
         ]
 
-
 {-|
 
     Test: Char/toLocaleLower
@@ -322,66 +311,81 @@ charToLocaleLowerTest =
                     Expect.equalLists (List.map func lowers) lowers
         ]
 
-
-
 {-
-    NOTE: the `toCode` tests are failing with this error:
-    ERROR org.finos.morphir.runtime.MorphirRuntimeError$CodeLocatedError: ExternalError : External error: Unrecognized character name :A
-        		at morphir: Morphir.SDK:Char:toCode (native function)
-        		at morphir: anonymous function within EntryPoint
--}
-{-|
     Test: Char/toCode
-    expected('A') = 65
-    expected('B') = 66
-    expected('木') = 0x6728
 -}
-{- charToCodeTest : Test
+charToCodeTest : Test
 charToCodeTest =
     let
         func = toCode
         uppers = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
         lowers = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+        symbols = ['!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/']
+        decimalDigits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+        nonEnglishChars = ['¥', '木', 'Ě', 'Σ']
     in
         describe "Char toCode Tests"
         [
             test "Upper Case Letters"
             \_ -> 
-                    Expect.equalLists (List.map func uppers) (List.range 65 (65 + 25))
+                Expect.equalLists (List.map func uppers) (List.range 65 (65 + 25))
             , test "Lower Case Letters"
             \_ -> 
-                    Expect.equalLists (List.map func lowers) (List.range 97 (97 + 25))
-        ] -}
+                Expect.equalLists (List.map func lowers) (List.range 97 (97 + 25))
+            , test "Symbols" 
+            \_ -> 
+                Expect.equalLists (List.map func symbols) (List.range 33 (33 + 14))
+            , test "Decimal Digits"
+            \_ ->
+                Expect.equalLists (List.map func decimalDigits) (List.range 48 (48 + 9))
+            , test "Non-English Characters"
+            \_ ->
+                Expect.equalLists (List.map func nonEnglishChars) [165, 26408, 282, 931] -- [0x00A5, 0x6728, 0x011A, 0x03A3]
+        ]
 
-charToCodeSimpleTest : Test
-charToCodeSimpleTest =
-    describe "Char toCode Simple Tests"
-    [
-        test "Upper Case Letter"
-        \_ -> 
-                Expect.equal (toCode 'A') 65 
-        , test "Lower Case Letter"
-        \_ -> 
-                Expect.equal (toCode 'a') 97 
-    ]
-
-{-|
-
+{-
     Test: Char/fromCode
-    expected(65) = 'A'
-    expected(66) = 'B'
-    expected(0x6728) = '木'
-    expected(-1) = '�'
-
 -}
 charFromCodeTest : Test
 charFromCodeTest =
-    describe "Simple Char/fromCode Tests"
+    let
+        func = fromCode
+        uppers = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+        lowers = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+        symbols = ['!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/']
+        decimalDigits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+        nonEnglishChars = ['¥', '木', 'Ě']
+    in
+        describe "Char fromCode Tests"
+        [
+            test "Upper Case Letters"
+            \_ -> 
+                Expect.equalLists (List.map func (List.range 65 (65 + 25))) uppers
+            , test "Lower Case Letters"
+            \_ -> 
+                Expect.equalLists (List.map func (List.range 97 (97 + 25))) lowers
+            , test "Symbols" 
+            \_ -> 
+                Expect.equalLists (List.map func (List.range 33 (33 + 14))) symbols
+            , test "Decimal Digits"
+            \_ ->
+                Expect.equalLists (List.map func (List.range 48 (48 + 9))) decimalDigits
+            , test "Non-English Characters"
+            \_ ->
+                Expect.equalLists (List.map func [165, 26408, 282]) nonEnglishChars
+        ]
+
+codeToCharToCode: Test
+codeToCharToCode =
+    describe "Unicode character code points roundtrip"
     [
-        test "Upper Case Letter"
+        test "Unicode Roundtrip starting at 32 (space)"
         \_ ->
-            Expect.equal (fromCode 65) 'A'
-        , test "Lower Case Letter"
-        \_ ->
-            Expect.equal (fromCode 97) 'a'
+            let
+                codePointsAsDecimal = List.range 32 1032
+                roundTripped = codePointsAsDecimal
+                  |> List.map fromCode
+                  |> List.map toCode
+            in
+                Expect.equalLists codePointsAsDecimal roundTripped
     ]

@@ -67,6 +67,7 @@ object CharSDK {
   }
 
   // Convert to upper case, according to any locale-specific case mappings.
+  // ??? Is this implemented correctly? There is no 'locale' parameter.
   val toLocaleUpper = DynamicNativeFunction1("toLocaleUpper") {
     (_: NativeContext) => (ch: RTChar) =>
       val result = ch.value.toString.toUpperCase
@@ -74,6 +75,7 @@ object CharSDK {
   }
 
   // Convert to lower case, according to any locale-specific case mappings.
+  // ??? Is this implemented correctly? There is no 'locale' parameter.
   val toLocaleLower = DynamicNativeFunction1("toLocaleLower") {
     (_: NativeContext) => (ch: RTChar) =>
       val result = ch.value.toString.toLowerCase
@@ -83,11 +85,11 @@ object CharSDK {
   // Convert to the corresponding Unicode code point
   val toCode = DynamicNativeFunction1("toCode") {
     (_: NativeContext) => (ch: RTChar) =>
-      val result = Character.codePointOf(ch.value.toString)
+      val result = ch.value.toString.codePointAt(0)
       RT.Primitive.Int(result)
   }
 
-  // Convert a Unicode code point to a character. he full range of unicode is from 0 to 0x10FFFF.
+  // Convert a Unicode code point to a character. The full range of unicode is from 0 to 0x10FFFF.
   // With numbers outside that range, you get the replacement character '�'
   val fromCode = DynamicNativeFunction1("fromCode") {
     (_: NativeContext) => (int: RT.Primitive.Int) =>
